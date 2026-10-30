@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Écoute à l’aveugle — VoxCPM Derja</title>
+  <style>
+    :root { color-scheme: dark; font: 16px/1.5 system-ui, sans-serif; background: #0b1020; color: #f3f5ff; }
+    body { max-width: 760px; margin: 0 auto; padding: 28px 18px 56px; }
+    h1 { line-height: 1.15; }
+    .card { margin: 18px 0; padding: 20px; border: 1px solid #303a58; border-radius: 16px; background: #121a30; }
+    label, legend { font-weight: 650; }
+    input[type="text"], input[type="file"] { display: block; width: 100%; margin-top: 8px; }
+    input[type="text"] { box-sizing: border-box; padding: 11px; border: 1px solid #536080; border-radius: 9px; background: #0b1020; color: inherit; }
+    fieldset { margin: 18px 0; padding: 14px; border: 1px solid #3a4565; border-radius: 10px; }
+    .scale, .choice { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
+    .scale label, .choice label { display: inline-flex; align-items: center; gap: 6px; font-weight: 450; }
+    button { padding: 11px 16px; border: 0; border-radius: 9px; background: #8d7bff; color: #0b1020; font-weight: 750; cursor: pointer; }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+    audio { display: block; width: 100%; margin: 18px 0; }
+    #expectedText { padding: 12px; border-left: 3px solid #8d7bff; background: #0b1020; white-space: pre-wrap; }
+    [hidden] { display: none !important; }
+    .muted { color: #b4bfdc; }
+    .status { min-height: 1.5em; color: #bfcaff; }
+    .error { color: #ffaaa8; }
+    .success { color: #a6f1c2; }
+    .counter { color: #c4baff; font-weight: 700; }
+    @media (max-width: 520px) { body { padding-inline: 12px; } .card { padding: 15px; } }
+  </style>
+</head>
+<body>
+  <h1>Évaluation à l’aveugle de la voix VoxCPM</h1>
+  <p class="muted">Chaque auditeur note les mêmes phrases séparément. L’accent se juge avant d’afficher le texte. L’audio et les réponses restent dans ce navigateur ; rien n’est envoyé au serveur.</p>
+
+  <section class="card" id="setup">
+    <label for="listenerId">Code anonyme de l’auditeur</label>
+    <input id="listenerId" type="text" maxlength="40" pattern="[A-Za-z0-9_-]{1,40}" autocomplete="off" placeholder="Ex. TN-01">
+    <label class="choice"><input id="fluentDerja" type="checkbox"> Je maîtrise la Derja tunisienne et peux juger naturellement son accent.</label>
+    <label for="manifestFile">Manifeste TSV (phrase_id, sample_file, model_version, expected_text)</label>
+    <input id="manifestFile" type="file" accept=".tsv,.txt,text/tab-separated-values">
+    <label for="audioFiles">Fichiers audio WAV du manifeste</label>
+    <input id="audioFiles" type="file" accept="audio/wav,.wav" multiple>
+    <p class="muted">Le nom de chaque WAV doit correspondre exactement à <code>sample_file</code>. Choisis une seule version de modèle par session. Après l’écoute, place le TSV téléchargé dans le même dossier que les WAV pour l’évaluation finale.</p>
+    <button id="startButton" type="button">Vérifier et commencer</button>
+    <p id="setupStatus" class="status" role="status" aria-live="polite"></p>
+  </section>
+
+  <main id="review" class="card" hidden>
+    <p class="counter" id="counter"></p>
+    <p>Écoute l’audio une première fois sans chercher le texte. Note seulement si la voix te semble naturellement tunisienne.</p>
+    <audio id="player" controls preload="metadata"></audio>
+
+    <fieldset id="accentField">
+      <legend>Accent tunisien naturel (avant de voir le texte)</legend>
+      <div class="scale">
+        <label><input type="radio" name="accent" value="1"> 1 — pas tunisien</label>
+        <label><input type="radio" name="accent" value="2"> 2</label>
+        <label><input type="radio" name="accent" value="3"> 3 — mitigé</label>
+        <label><input type="radio" name="accent" value="4"> 4</label>
+        <label><input type="radio" name="accent" value="5"> 5 — naturellement tunisien</label>
+      </div>
+    </fieldset>
+    <button id="revealButton" type="button">Enregistrer la note d’accent et révéler le texte</button>
+
+    <section id="textStage" hidden>
+      <h2>Texte attendu</h2>
+      <p id="expectedText" dir="auto"></p>
+      <fieldset>
+        <legend>La phrase est comprise ?</legend>
+        <div class="choice"><label><input type="radio" name="understood" value="yes"> Oui</label><label><input type="radio" name="understood" value="no"> Non</label></div>
+      </fieldset>
+      <fieldset>
+        <legend>Tous les mots sont prononcés correctement ?</legend>
+        <div class="choice"><label><input type="radio" name="words" value="yes"> Oui</label><label><input type="radio" name="words" value="no"> Non</label></div>
+      </fieldset>
+      <fieldset>
+        <legend>L’audio est complet, sans mot coupé ni omission ?</legend>
+        <div class="choice"><label><input type="radio" name="complete" value="yes"> Oui</label><label><input type="radio" name="complete" value="no"> Non</label></div>
+      </fieldset>
+      <fieldset>
+        <legend>Le débit est-il acceptable ?</legend>
+        <div class="choice"><label><input type="radio" name="pace" value="yes"> Oui</label><label><input type="radio" name="pace" value="no"> Non</label></div>
+      </fieldset>
+      <label for="problemNote">Mot mal prononcé/omis ou forme tunisienne attendue (facultatif)</label>
+      <input id="problemNote" type="text" maxlength="200" autocomplete="off" placeholder="Ex. mot entendu → prononciation souhaitée">
+      <button id="saveButton" type="button">Enregistrer et passer à la phrase suivante</button>
+    </section>
+    <p id="reviewStatus" class="status" role="status" aria-live="polite"></p>
+  </main>
+
+  <section id="finished" class="card" hidden>
+    <h2>Écoute terminée</h2>
+    <p id="finishedSummary"></p>
+    <button id="downloadButton" type="button">Télécharger mes évaluations TSV</button>
+    <p class="muted">Le TSV contient les réponses, les codes de phrase et la version du modèle, ainsi que le commentaire facultatif ; aucun audio ni photo.</p>
+  </section>
+
+  <script>
+    const REQUIRED = ['phrase_id', 'sample_file', 'model_version', 'expected_text'];
+    const setupStatus = document.getElementById('setupStatus');
+    const reviewStatus = document.getElementById('reviewStatus');
+    const reviewRows = [];
+    let samples = [];
+    let index = 0;
+    let listenerId = '';
+    let audioUrl = '';
+
+    function checkedValue(name) {
+      return document.querySelector(`input[name="${name}"]:checked`)?.value || '';
+    }
+
+    function clearStageTwo() {
+      for (const name of ['understood', 'words', 'complete', 'pace']) {
+        document.querySelectorAll(`input[name="${name}"]`).forEach((input) => { input.checked = false; });
+      }
+    }
+
+    function parseManifest(contents) {
+      const lines = contents.replace(/^\uFEFF/, '').split(/\r?\n/).filter((line) => line.trim());
+      if (!lines.length) throw new Error('Le manifeste est vide.');
+      const headers = lines[0].split('\t').map((field) => field.trim());
+      const missing = REQUIRED.filter((field) => !headers.includes(field));
+      if (missing.length) throw new Error(`Colonnes manquantes : ${missing.join(', ')}.`);
+      const seenIds = new Set();
+      const seenFiles = new Set();
+      const rows = lines.slice(1).map((line, lineIndex) => {
+        const values = line.split('\t');
+        if (values.length !== headers.length) throw new Error(`Ligne ${lineIndex + 2} : colonnes TSV incorrectes.`);
+        const row = Object.fromEntries(headers.map((field, i) => [field, values[i].trim()]));
+        if (REQUIRED.some((field) => !row[field])) throw new Error(`Ligne ${lineIndex + 2} : un champ obligatoire est vide.`);
+        if (/[\\/]/.test(row.sample_file) || row.sample_file === '.' || row.sample_file === '..') throw new Error('sample_file doit être un simple nom de fichier WAV, sans chemin.');
+        if (seenIds.has(row.phrase_id) || seenFiles.has(row.sample_file)) throw new Error(`Ligne ${lineIndex + 2} : phrase_id et fichiers doivent être uniques.`);
+        seenIds.add(row.phrase_id);
+        seenFiles.add(row.sample_file);
+        return row;
+      });
+      if (!rows.length) throw new Error('Le manifeste ne contient aucune phrase.');
+      if (new Set(rows.map((row) => row.model_version)).size !== 1) throw new Error('Le manifeste doit contenir une seule version de modèle.');
+      return rows;
+    }
+
+    async function verifyAndStart() {
+      setupStatus.className = 'status';
+      try {
+        listenerId = document.getElementById('listenerId').value.trim();
+        const manifestFile = document.getElementById('manifestFile').files[0];
+        const audioList = [...document.getElementById('audioFiles').files];
+        if (!/^[A-Za-z0-9_-]{1,40}$/.test(listenerId)) throw new Error('Le code auditeur doit contenir uniquement lettres, chiffres, tirets ou soulignés (40 caractères max).');
+        if (!document.getElementById('fluentDerja').checked) throw new Error('Cette évaluation de l’accent doit être faite par une personne maîtrisant la Derja tunisienne.');
+        if (!manifestFile || !audioList.length) throw new Error('Ajoute le manifeste et les WAV.');
+        const rows = parseManifest(await manifestFile.text());
+        const filesByName = new Map();
+        for (const file of audioList) {
+          if (filesByName.has(file.name)) throw new Error(`Nom de fichier audio en double : ${file.name}.`);
+          filesByName.set(file.name, file);
+        }
+        if (filesByName.size !== rows.length || rows.some((row) => !filesByName.has(row.sample_file))) throw new Error('Les WAV sélectionnés ne correspondent pas exactement au manifeste.');
+        if (!globalThis.crypto?.subtle) throw new Error('Ce navigateur ne permet pas de vérifier les copies audio. Ouvre la page sur localhost ou dans un navigateur récent.');
+        const hashes = new Set();
+        for (const row of rows) {
+          const digest = await crypto.subtle.digest('SHA-256', await filesByName.get(row.sample_file).arrayBuffer());
+          const hash = [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
+          if (hashes.has(hash)) throw new Error('Deux phrases ont exactement le même audio. Corrige le manifeste avant l’écoute.');
+          hashes.add(hash);
+        }
+        samples = rows.map((row) => ({ ...row, file: filesByName.get(row.sample_file) }));
+        for (let i = samples.length - 1; i > 0; i--) {
+          const j = crypto.getRandomValues(new Uint32Array(1))[0] % (i + 1);
+          [samples[i], samples[j]] = [samples[j], samples[i]];
+        }
+        document.getElementById('setup').hidden = true;
+        document.getElementById('review').hidden = false;
+        showSample();
+      } catch (error) {
+        setupStatus.className = 'status error';
+        setupStatus.textContent = error.message || String(error);
+      }
+    }
+
+    function showSample() {
+      const sample = samples[index];
+      if (!sample) return finish();
+      if (audioUrl) URL.revokeObjectURL(audioUrl);
+      audioUrl = URL.createObjectURL(sample.file);
+      document.getElementById('player').src = audioUrl;
+      document.getElementById('counter').textContent = `Phrase ${index + 1} / ${samples.length}`;
+      document.getElementById('expectedText').textContent = sample.expected_text;
+      document.getElementById('textStage').hidden = true;
+      document.getElementById('accentField').hidden = false;
+      document.getElementById('revealButton').hidden = false;
+      document.getElementById('revealButton').disabled = false;
+      document.getElementById('saveButton').disabled = false;
+      document.querySelectorAll('input[name="accent"]').forEach((input) => { input.checked = false; });
+      clearStageTwo();
+      reviewStatus.textContent = '';
+    }
+
+    function revealText() {
+      const accent = checkedValue('accent');
+      if (!accent) {
+        reviewStatus.className = 'status error';
+        reviewStatus.textContent = 'Note d’abord l’accent sans consulter le texte.';
+        return;
+      }
+      document.getElementById('accentField').hidden = true;
+      document.getElementById('revealButton').hidden = true;
+      document.getElementById('textStage').hidden = false;
+      reviewStatus.className = 'status';
+      reviewStatus.textContent = 'Maintenant, vérifie compréhension, mots, intégralité et débit.';
+    }
+
+    function saveReview() {
+      const answers = {
+        accent_natural_1_to_5: checkedValue('accent'),
+        understood: checkedValue('understood'),
+        words_correct: checkedValue('words'),
+        complete: checkedValue('complete'),
+        pace_ok: checkedValue('pace')
+      };
+      if (Object.values(answers).some((value) => !value)) {
+        reviewStatus.className = 'status error';
+        reviewStatus.textContent = 'Réponds à chaque question avant de continuer.';
+        return;
+      }
+      const sample = samples[index];
+      reviewRows.push({
+        phrase_id: sample.phrase_id,
+        sample_file: sample.sample_file,
+        model_version: sample.model_version,
+        listener_id: listenerId,
+        listener_tunisian_derja_fluent: 'yes',
+        problem_note: document.getElementById('problemNote').value.trim().replace(/[\t\r\n]+/g, ' '),
+        ...answers
+      });
+      index++;
+      showSample();
+    }
+
+    function finish() {
+      if (audioUrl) URL.revokeObjectURL(audioUrl);
+      document.getElementById('review').hidden = true;
+      document.getElementById('finished').hidden = false;
+      document.getElementById('finishedSummary').textContent = `${reviewRows.length} évaluations enregistrées pour ${listenerId}.`;
+    }
+
+    function downloadResults() {
+      const fields = ['phrase_id', 'sample_file', 'model_version', 'listener_id', 'listener_tunisian_derja_fluent', 'accent_natural_1_to_5', 'understood', 'words_correct', 'complete', 'pace_ok'];
+      fields.push('problem_note');
+      const lines = [fields.join('\t'), ...reviewRows.map((row) => fields.map((field) => row[field]).join('\t'))];
+      const blob = new Blob([lines.join('\n') + '\n'], { type: 'text/tab-separated-values;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `voxcpm-review-${listenerId.replace(/[^a-zA-Z0-9_-]/g, '_')}.tsv`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById('startButton').addEventListener('click', verifyAndStart);
+    document.getElementById('revealButton').addEventListener('click', revealText);
+    document.getElementById('saveButton').addEventListener('click', saveReview);
+    document.getElementById('downloadButton').addEventListener('click', downloadResults);
+  </script>
+</body>
+</html>

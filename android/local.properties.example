@@ -1,0 +1,3 @@
+# Copy this file to local.properties and replace <YOUR_USER> with your Windows user name.
+# Do not commit local.properties: it contains a machine-specific SDK path.
+sdk.dir=C\:\\Users\\<YOUR_USER>\\AppData\\Local\\Android\\Sdk

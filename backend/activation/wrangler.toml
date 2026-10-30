@@ -1,0 +1,13 @@
+name = "clash-activation"
+main = "activation-worker.js"
+compatibility_date = "2026-09-01"
+
+# Même namespace KV que le parrainage : les clés sont préfixées (c: pour les codes),
+# donc aucun risque de collision.
+[[kv_namespaces]]
+binding = "REF"
+id = "47ba4343322f493a9e28bd405eab013c"
+
+# Secrets à poser une fois (jamais dans ce fichier) :
+#   npx wrangler secret put CODE_SALT      -> sel des empreintes de codes
+#   npx wrangler secret put ADMIN_TOKEN    -> jeton des routes /add, /status, /stats

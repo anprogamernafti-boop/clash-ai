@@ -1,0 +1,25 @@
+{
+  "name": "Clash AI — l'IA qui lit la personne",
+  "short_name": "Clash AI",
+  "description": "Analyse ta photo et reçois un clash en derja tunisienne. Style, expression, énergie : le verdict tient sur une carte partageable.",
+  "id": "/",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#120404",
+  "theme_color": "#120404",
+  "lang": "fr",
+  "categories": ["entertainment", "photo", "social"],
+  "share_target": {
+    "action": "./index.html",
+    "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
+    "params": { "title": "title", "text": "text", "url": "url" }
+  },
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

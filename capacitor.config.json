@@ -1,0 +1,12 @@
+{
+  "appId": "tn.clashai.app",
+  "appName": "Clash AI",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": { "allowMixedContent": false, "captureInput": true, "webContentsDebuggingEnabled": false },
+  "server": {
+    "androidScheme": "https",
+    "allowNavigation": ["generativelanguage.googleapis.com", "api.openai.com", "cdn.jsdelivr.net"]
+  },
+  "plugins": { "SplashScreen": { "backgroundColor": "#120404", "showSpinner": false } }
+}

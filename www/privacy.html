@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Clash AI — Politique de confidentialité</title>
+<style>body{font-family:system-ui,-apple-system,sans-serif;max-width:720px;margin:0 auto;padding:24px;line-height:1.65;color:#221;background:#fff}
+h1{font-size:26px}h2{font-size:18px;margin-top:28px}code{background:#f2f2f2;padding:2px 5px;border-radius:4px}
+.warn{background:#fff5e6;border-left:4px solid #ff8a00;padding:10px 14px}
+table{border-collapse:collapse;width:100%;margin-top:8px}
+th,td{text-align:left;border-bottom:1px solid #e6e6e6;padding:7px 6px;font-size:14.5px;vertical-align:top}
+th{background:#fafafa}</style></head><body>
+<h1>Politique de confidentialité — Clash AI</h1>
+<p><em>Dernière mise à jour : 1 octobre 2026</em></p>
+
+<div class="warn">
+  <strong>L'essentiel en trois lignes.</strong> Clash AI n'a ni compte ni inscription. La photo que tu
+  choisis est envoyée à l'IA pour produire le clash, puis elle est <strong>oubliée</strong> : nous ne la
+  conservons pas. Nous recevons des <strong>compteurs anonymes</strong> (des nombres, rien d'autre) et un
+  <strong>identifiant technique d'appareil</strong> qui sert uniquement à limiter les abus.
+</div>
+
+<h2>1. Qui sommes-nous</h2>
+<p>Clash AI est une application de divertissement qui produit un commentaire humoristique à partir
+d'une photo choisie par l'utilisateur. Contact : <strong>[adresse de support à configurer]</strong> —
+WhatsApp : <strong>[numéro de support à configurer]</strong>.</p>
+
+<h2>2. Ce qui se passe quand tu utilises l'application</h2>
+<table>
+<tr><th>Ce que tu fais</th><th>Ce qui sort de ton téléphone</th><th>Où ça va</th></tr>
+<tr>
+  <td>Tu choisis une photo et tu lances le clash</td>
+  <td><strong>La photo</strong> et <strong>le prénom</strong> saisi</td>
+  <td>Notre relais, qui la transmet à <strong>Google Gemini</strong> pour rédiger le clash. Notre relais
+      existe pour que la clé de l'IA reste chez nous et ne circule jamais dans l'application.</td>
+</tr>
+<tr>
+  <td>Tu touches « 🔊 Voix »</td>
+  <td><strong>Le texte du clash</strong></td>
+  <td>Notre Worker Cloudflare envoie le texte à <strong>Baarcha Dido</strong> uniquement si l’option
+      payante est explicitement activée (désactivée par défaut). L’identifiant technique de l’appareil sert à limiter les appels abusifs côté
+      Cloudflare. Des services de secours peuvent aussi être appelés selon leur disponibilité
+      (<strong>Azure Speech</strong>, Microsoft Edge, Google ou Cloudflare Workers AI).</td>
+</tr>
+<tr>
+  <td>Tu utilises l'application (n'importe quelle action)</td>
+  <td><strong>Des nombres</strong> : « 1 photo », « 1 vidéo », « 1 partage »…</td>
+  <td>Notre service de compteurs. Aucune photo, aucun texte, aucun nom, aucun identifiant n'y est joint.</td>
+</tr>
+<tr>
+  <td>Tu utilises un code d'activation, ou quelqu'un arrive par ton lien de parrainage</td>
+  <td><strong>L'identifiant technique d'appareil</strong> (voir §3)</td>
+  <td>Notre service d'activation et de parrainage, pour qu'un code reste à usage unique et qu'un
+      parrainage ne soit pas compté deux fois.</td>
+</tr>
+</table>
+<p><strong>Ta photo n'est jamais conservée.</strong> Elle traverse notre relais pour atteindre l'IA,
+elle n'est pas écrite sur un disque, et aucun journal ne la recopie. Le modèle d'analyse local
+(voir §5), quand il est utilisé, s'exécute entièrement dans ton navigateur : dans ce cas la photo
+ne quitte pas ton appareil.</p>
+
+<h2>3. L'identifiant technique d'appareil</h2>
+<p>Pour empêcher les abus (épuiser indéfiniment les essais gratuits, réutiliser un code d'activation,
+gonfler un parrainage), l'application calcule une <strong>empreinte technique</strong> à partir de
+caractéristiques de ton navigateur et de ton appareil : version du navigateur, langue, taille et
+densité de l'écran, fuseau horaire, nombre de cœurs, plateforme, gestion du tactile. Ces
+caractéristiques sont condensées en une courte chaîne.</p>
+<p>Ce n'est <strong>pas</strong> un identifiant publicitaire, il ne permet pas de te reconnaître sur
+d'autres applications ou sites, et il n'est utilisé à aucune fin publicitaire. Pour le parrainage, il
+est stocké sous forme <strong>hachée</strong> (avec un sel), donc non réversible.</p>
+
+<h2>4. Ce que l'application ne fait pas</h2>
+<p>Aucun compte, aucune inscription, aucune donnée de localisation, aucun accès à tes contacts, à ta
+galerie ou à tes fichiers en dehors de la photo que tu choisis toi-même. Aucun identifiant
+publicitaire, aucun traqueur tiers, aucune revente de données. Aucune photo d'une autre personne
+n'est analysée : dans un défi, c'est la personne défiée qui envoie <em>sa propre</em> photo — le lien
+de défi ne transporte que des prénoms et un score.</p>
+
+<h2>5. Services tiers</h2>
+<ul>
+<li><strong>Baarcha</strong> — Dido, synthèse vocale en derja tunisienne, uniquement lorsque l’option payante est activée :
+<code>baarcha.tn/privacy</code></li>
+<li><strong>Microsoft</strong> — Azure Speech et Edge Read Aloud, moteurs de secours lorsque configurés ou accessibles</li>
+<li><strong>Google</strong> — API Gemini (rédaction du clash) et synthèse vocale de secours :
+<code>policies.google.com/privacy</code></li>
+<li><strong>Cloudflare Workers AI</strong> — moteur de voix de dernier recours, selon disponibilité</li>
+<li><strong>jsDelivr</strong> — téléchargement, au premier lancement seulement, du modèle d'analyse
+local ; le modèle tourne ensuite entièrement hors ligne dans ton navigateur</li>
+<li><strong>Cloudflare</strong> — hébergement des relais décrits au §2</li>
+</ul>
+
+<h2>6. Public concerné</h2>
+<p>Application destinée aux 13 ans et plus. L'utilisateur doit disposer de l'accord des personnes
+figurant sur les photos qu'il soumet.</p>
+
+<h2>7. Durée de conservation et droits</h2>
+<p>Les données stockées sur ton appareil (essais restants, compteurs locaux, réglages) disparaissent
+quand tu effaces les données de l'application ou que tu la désinstalles. Côté serveurs, les compteurs
+sont des nombres par jour, conservés au maximum quelques semaines, et les enregistrements de
+parrainage et d'activation sont limités dans le temps par une durée d'expiration automatique.</p>
+<p>Pour toute demande d'accès, de rectification ou d'effacement : <strong>[adresse de support à configurer]</strong>.</p>
+
+<h2>8. Modifications</h2>
+<p>Toute évolution de cette politique sera publiée sur cette page, avec sa date de mise à jour.</p>
+</body></html>

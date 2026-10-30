@@ -1,0 +1,18 @@
+name = "clash-gemini-proxy"
+main = "gemini-proxy-worker.js"
+compatibility_date = "2026-09-01"
+
+[ai]
+binding = "AI"
+
+[[kv_namespaces]]
+binding = "REF"
+id = "47ba4343322f493a9e28bd405eab013c"
+
+[[ratelimits]]
+name = "GEMINI_LIMITER"
+namespace_id = "4310769202"
+
+  [ratelimits.simple]
+  limit = 10
+  period = 60

@@ -1,0 +1,24 @@
+name = "clash-voice-pilot"
+main = "voice-worker.js"
+compatibility_date = "2026-09-01"
+
+[vars]
+BAARCHA_TTS_ENABLED = "false"
+VOXCPM_TTS_ENABLED = "false"
+HF_VOXCPM_TTS_ENABLED = "true"
+HF_VOXCPM_SPACE_URL = "https://assernafti-clash-ai-voxcpm-tn.hf.space"
+VOICE_POLICY = "voxcpm_only"
+VOXCPM_CACHE_VERSION = "voxcpm-tn-pilot-reference-v3"
+VOXCPM_ROLLOUT_PERCENT = "100"
+VOICE_PILOT_AUTH_REQUIRED = "true"
+
+[ai]
+binding = "AI"
+
+[[ratelimits]]
+name = "VOICE_LIMITER"
+namespace_id = "4310769201"
+
+  [ratelimits.simple]
+  limit = 2
+  period = 60

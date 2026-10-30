@@ -1,0 +1,5 @@
+gradio==6.30.0
+spaces
+voxcpm
+soundfile
+numpy

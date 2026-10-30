@@ -1,0 +1,15 @@
+name = "clash-events"
+main = "events-worker.js"
+compatibility_date = "2026-09-01"
+
+# Même namespace KV que le parrainage, l'activation et la voix : les clés sont préfixées
+# (ev: pour l'analytique), donc aucun risque de collision.
+[[kv_namespaces]]
+binding = "REF"
+id = "47ba4343322f493a9e28bd405eab013c"
+
+# Secret à poser une fois (jamais dans ce fichier) :
+#   npx wrangler secret put ADMIN_TOKEN   -> jeton de la route /stats
+#
+# ⚠️ Le plan gratuit de KV accepte ~1 000 écritures par jour. Le client envoie UN SEUL envoi
+# groupé par session (à la fermeture de la page), donc ~1 000 sessions par jour sont couvertes.

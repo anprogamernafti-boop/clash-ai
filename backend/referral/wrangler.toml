@@ -1,0 +1,7 @@
+name = "clash-referral"
+main = "referral-worker.js"
+compatibility_date = "2026-09-01"
+
+[[kv_namespaces]]
+binding = "REF"
+id = "47ba4343322f493a9e28bd405eab013c"

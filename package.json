@@ -1,0 +1,15 @@
+{
+  "name": "clash-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Clash AI — analyse de photo et clash en derja (application Android)",
+  "scripts": {
+    "test": "node --test backend/app-quota.test.mjs backend/voice/evaluate-voice-corpus.test.mjs backend/voice/review-voice-corpus.test.mjs backend/voice/voice-quality.test.mjs backend/voice/voice-pilot-mode.test.mjs backend/voice/voice-text.test.mjs backend/voice/voice-worker.test.mjs",
+    "sync": "cap sync android",
+    "open": "cap open android",
+    "apk": "cd android && ./gradlew assembleRelease",
+    "aab": "cd android && ./gradlew bundleRelease"
+  },
+  "dependencies": { "@capacitor/android": "^6.2.0", "@capacitor/core": "^6.2.0" },
+  "devDependencies": { "@capacitor/cli": "^6.2.0" }
+}
