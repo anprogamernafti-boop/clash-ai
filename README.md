@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="https://clash-ai.pages.dev/">Live demo</a> ·
+  <a href="https://clash-ai.pages.dev/">Clash AI</a> ·
   <a href="https://clash-ai.pages.dev/privacy.html">Privacy notice</a>
 </p>
 
