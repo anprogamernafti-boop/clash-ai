@@ -71,4 +71,3 @@ Consulte la [notice de confidentialité](https://clash-ai.pages.dev/privacy.html
 Projet conçu par Asser Nafti, autour de la génération en derja, des applications web mobiles et de l’intégration d’API IA dans une architecture serverless.
 
 **Made in Tunisia 🇹🇳**
-
