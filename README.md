@@ -27,13 +27,15 @@ Clash AI transforme une photo envoyée par l’utilisateur en verdict social amu
 
 ## Architecture
 
-**Flux principal :** application web ou Android → Worker Cloudflare → Gemini → verdict et texte parlé → Worker vocal facultatif → VoxCPM. L’application produit ensuite une carte ou une courte vidéo partageable.
+**Flux principal :** Gemini via le Worker Cloudflare produit le verdict ; CLIP ViT-B/32 exécuté dans le navigateur sert de repli automatique. L’interface propose aussi OpenAI avec la clé API de l’utilisateur. Le texte parlé peut ensuite être envoyé au Worker VoxCPM facultatif ; l’application produit une carte ou une courte vidéo partageable.
 
 | Couche | Technologies |
 | --- | --- |
 | Application web | HTML, CSS et JavaScript |
 | Application Android | Capacitor 6, Android et Gradle |
-| Génération IA | Gemini via Worker Cloudflare |
+| Vision principale | Gemini via Worker Cloudflare |
+| Vision de secours dans le navigateur | Transformers.js et CLIP ViT-B/32 |
+| Fournisseur facultatif | OpenAI via la clé API fournie par l’utilisateur |
 | Synthèse vocale pilote | VoxCPM sur Hugging Face ZeroGPU via Worker Cloudflare |
 | Hébergement et API | Cloudflare Pages, Workers et KV |
 
