@@ -3,7 +3,7 @@
 ### Une expérience photo de roast inspirée de la derja tunisienne
 
 <p align="center">
-  <img src="play-feature-1024x500.png" alt="Visuel de présentation de Clash AI — Made in Tunisia" width="820">
+  <img src="play-icon-512.png" alt="Icône mobile de Clash AI" width="220">
 </p>
 
 <p align="center">
