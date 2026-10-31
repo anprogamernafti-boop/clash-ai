@@ -12,22 +12,22 @@
 <meta property="og:title" content="Clash AI — Le clash tunisien par IA">
 <meta property="og:description" content="Envoie ta photo, découvre ton profil et reçois un clash en derja tunisienne. Ton verdict devient une vidéo à partager.">
 <meta property="og:url" content="https://clash-ai.pages.dev/">
-<meta property="og:image" content="https://clash-ai.pages.dev/icons/icon-512.png">
+<meta property="og:image" content="https://clash-ai.pages.dev/icons/icon-512.png?v=17">
 <meta property="og:image:width" content="512">
 <meta property="og:image:height" content="512">
 <meta property="og:image:alt" content="Logo Clash AI, l’application tunisienne de clash par IA">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Clash AI — Le clash tunisien par IA">
 <meta name="twitter:description" content="Envoie ta photo et découvre ton clash en derja tunisienne. À toi de jouer !">
-<meta name="twitter:image" content="https://clash-ai.pages.dev/icons/icon-512.png">
+<meta name="twitter:image" content="https://clash-ai.pages.dev/icons/icon-512.png?v=17">
 <meta name="theme-color" content="#120404">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Clash AI">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="icon" href="icons/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest?v=17">
+<link rel="apple-touch-icon" href="icons/icon-192.png?v=17">
+<link rel="icon" href="icons/icon-192.png?v=17">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,sans-serif}
   body{min-height:100vh;background:radial-gradient(ellipse at top,#2b0a0a,#120404 60%,#080202);
@@ -3728,7 +3728,7 @@ if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
   window.addEventListener('load', function () {
     /* `updateViaCache: 'none'` : le navigateur ne doit PAS servir `sw.js` depuis son cache HTTP,
        sinon une ancienne version du service worker peut tourner des semaines. */
-    navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(function (reg) {
+    navigator.serviceWorker.register('sw.js?v=17, { updateViaCache: 'none' }).then(function (reg) {
       const s = $('nativebarState'); if (s) s.textContent = 'PWA · hors ligne prêt';
       /* On cherche une mise à jour au lancement, à chaque retour dans l'app et une fois par heure. */
       const cherche = function () { try { reg.update(); } catch (e) {} };

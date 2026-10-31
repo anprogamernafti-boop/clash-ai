@@ -4,9 +4,9 @@
    ⚠️ LE NOM DU CACHE DOIT CHANGER À CHAQUE LIVRAISON : c'est lui qui invalide l'ancienne copie.
    L'oublier donne exactement le symptôme « la mise à jour n'est pas partie » : le site est bien
    déployé, mais le navigateur ressert l'ancien fichier. */
-const CACHE = 'clashai-v15';
-const SHELL = ['./', './index.html', './pay-mode.js', './billing-client.js', './referral-client.js', './manifest.webmanifest',
-               './icons/icon-192.png', './icons/icon-512.png', './icons/icon-512-maskable.png'];
+const CACHE = 'clashai-v17';
+const SHELL = ['./', './index.html', './pay-mode.js', './billing-client.js', './referral-client.js', './manifest.webmanifest?v=17',
+               './icons/icon-192.png?v=17', './icons/icon-512.png?v=17', './icons/icon-512-maskable.png?v=17'];
 const API_HOSTS = ['generativelanguage.googleapis.com', 'api.openai.com', 'cdn.jsdelivr.net'];
 
 self.addEventListener('install', (e) => {
